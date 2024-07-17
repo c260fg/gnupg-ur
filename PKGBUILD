@@ -8,7 +8,7 @@
 
 pkgname=gnupg
 pkgver=2.4.5
-pkgrel=2
+pkgrel=3
 pkgdesc='Complete and free implementation of the OpenPGP standard'
 arch=(x86_64)
 url='https://www.gnupg.org/'
