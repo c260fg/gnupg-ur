@@ -139,7 +139,7 @@ prepare() {
   sed -n '95, 125 p' COPYING.other > BSD-2-Clause.txt
   sed -n '128, 160 p' COPYING.other > Unicode-TOU.txt
 
-  sh autogen.sh
+  ./autogen.sh
 }
 
 build() {
