@@ -83,6 +83,7 @@ source=(
   0019-gpg-Default-to-compliance-openpgp.patch
   0020-gpg-Fix-newlines-in-Cleartext-Signature-Framework-CS.patch
   0021-Add-keyboxd-systemd-support.patch
+  0022-Support-large-RSA-keygen-in-non-batch-mode.patch
   0023-gpg-Verify-Text-mode-Signatures-over-binary-Literal-.patch
 )
 sha256sums=('45d7a37b15e8afc6361a4ca168f610e5d3a9dd28de66453b2a25607fa162dfc1'
@@ -126,6 +127,7 @@ sha256sums=('45d7a37b15e8afc6361a4ca168f610e5d3a9dd28de66453b2a25607fa162dfc1'
             'd7e55304b5769fd210dbf4ac0b56f1d80090d0d5ce1f8695c670d28efd687344'
             'cc574dfdffa3c64241e56b819a2626ee80d2cd5b19c3b6794d55162c4e286e77'
             '5ad3252991b975080154971b235c493c91f21242ccd47aa8a43f57d62eac79e6'
+            '9bb1ea61b1f2885e4e82cf743e065c67ee60ce8a8c135ae6b4a56536a49bcec6'
             'fe879074384037f818c5287c668d2e655bc3628299ce1ab33f8999967c88321d')
 b2sums=('2b0b212f01e96ed04340437d71986473a088d6935e6ef0cde2ce983667037e18bcc519e316dce3789f952ca08cb7f1cbf6312d460619f686ec247a5403d85a57'
         '7a3af856305eb4b00929aaf029dd4e5c84376df4f30add76976b9b058addf6fc4d8c39335fc83d11493ea9d8a40f0510dbac8572b99a8c8b9b3a4eca8e585774'
@@ -168,6 +170,7 @@ b2sums=('2b0b212f01e96ed04340437d71986473a088d6935e6ef0cde2ce983667037e18bcc519e
         '321e892b2e542979561d97a0e09c8e4c6cbc1a7f7efc3cd2b0d75587f846cbbec220f458588d4a11db2e527a96b3fdc71a81d2a1cd266fa9a34572f9ffb9da89'
         '2fd9923815d72333ddca1151103f8557d5c724768b12cff552b94cea47e55d713a6319a79813515cb702b5151711ef67fdcfaabce62e6bd7116ca3572267f376'
         'd8c5b45c361b252b712ba931e1f64fb90eb1781f2a3204f673f268fda97e610253f3f584629e99353006ed8c8e1061693a02b6aa0088ff7bf47fd1a62a1aa627'
+        'da8bf0888fd44e2beb23128adced17225ace1ff5e31bf04b2f99c24b4ffd0c8f05c4e0d63490b20983f237ffd96ca8681c1cf10de6bdd1ad4463c239ba680a30'
         '88d8d3bc31bb071b3b66a6276d5cb5ee0c0add168e26c7b89f62589b9290cfaaeef31ec60e376a1c027ec972bf1419653c1ffddd11a6a7f328e1533ae3f36810')
 validpgpkeys=(
   '5B80C5754298F0CB55D8ED6ABCEF7E294B092E28' # Andre Heinecke (Release Signing Key)
@@ -199,6 +202,7 @@ prepare() {
 
 build() {
   local configure_options=(
+    --enable-large-secmem  # prerequisite for large RSA keys
     --enable-maintainer-mode
     --libexecdir=/usr/lib/gnupg
     --prefix=/usr
