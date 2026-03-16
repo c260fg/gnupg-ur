@@ -276,11 +276,16 @@ prepare() {
     _src
   if [[ "${_archive_format}" == "git" ]]; then
     mv \
-      "${_tarfile}" \
-      "${_tarname}"
+      "${srcdir}/${_tarfile}" \
+      "${srcdir}/${_tarname}"
+  else
+    echo \
+      "Archive format: '${_archive_format}'"
   fi
+  ls \
+    "${srcdir}"
   cd \
-    "${_tarname}"
+    "${srcdir}/${_tarname}"
   for _src in "${source[@]}"; do
     _src="${_src%%::*}"
     _src="${_src##*/}"
