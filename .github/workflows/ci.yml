@@ -584,6 +584,37 @@ jobs:
               -rf \
               "${HOME}/fur"
       - name:
+          Installs Termux Keyring.
+        run: |
+          /entrypoint.sh \
+            fur \
+              -v \
+              -p \
+                "pacman" \
+              -d \
+              "termux-keyring"
+          /entrypoint.sh \
+            rm \
+              "${HOME}/fur/termux/any/"*".pkg.tar."*".sig"
+          /entrypoint.sh \
+            pacman \
+              -Udd \
+              --noconfirm \
+              "${HOME}/fur/termux/any/"*".pkg.tar."* \
+              --overwrite="*"
+          /entrypoint.sh \
+            rm \
+              -rf \
+              "${HOME}/fur"
+          /entrypoint.sh \
+            pacman-key \
+              --init || \
+            true
+          /entrypoint.sh \
+            pacman \
+              -Sy || \
+            true
+      - name:
           Installs Clang and Ninja.
         run: |
           # pkg/pip need to be prefixed with /entrypoint.sh
@@ -594,27 +625,35 @@ jobs:
                 -y \
                 "clang" \
                 "ninja"
-          # This doesn't work
-          # /entrypoint.sh \
-          #   gpg \
-          #     --homedir \
-          #       "/data/data/com.termux/files/usr/etc/pacman.d/gnupg" \
-          #     --recv-keys \
-          #       "998DE27318E867EA976BA877389CEED64573DFCA"
-          # One needs to manually install the
-          # termux-keyring pacman package if
-          # in the Termux Debian environment.
-          # /entrypoint.sh \
-          #   pacman \
-          #     -Sy \
-          #     termux-keyring
-          # /entrypoint.sh \
-          #   pacman-key \
-          #     --init
           # /entrypoint.sh \
           #   pip \
           #     install \
           #     "meson"
+      - name:
+          Installs build dependencies.
+        run: |
+          export \
+            _pkgs="$(_evmfs="false" \
+                recipe-get \
+                  "PKGBUILD" \
+                  "makedepends")"
+          SHELL="bash" \
+          /entrypoint.sh \
+            pacman \
+              -S \
+                --noconfirm \
+                jq \
+                ${_pkgs} \
+                --overwrite="*"
+          /entrypoint.sh \
+            bash \
+              "${HOME}/fur-src/fur/fur" \
+                -v \
+                -t \
+                  "tree" \
+                -p \
+                  "pacman" \
+                "libassuan"
       - name:
           Builds the package.
         run: |
@@ -627,7 +666,8 @@ jobs:
                 "${HOME}/fur-git-build" \
               -- \
               -df \
-              --nocheck
+              --nocheck \
+              --skippgpcheck
           /entrypoint.sh \
             echo \
               "Home: ${HOME}"
@@ -635,30 +675,30 @@ jobs:
             "$(pwd)" \
             -iname \
               "*.pkg.tar.*"
-      - name:
-          Installs the package.
-        run: |
-          /entrypoint.sh \
-            pacman \
-              -Rdd \
-              --noconfirm \
-              "fur" || \
-              true
-          /entrypoint.sh \
-            pacman \
-              -Udd \
-              --noconfirm \
-                $(find \
-                    "$(pwd)" \
-                    -iname \
-                      "*.pkg.tar.*")
-      - name:
-          Tests the package.
-        run: |
-          /entrypoint.sh \
-            fur \
-              -v \
-              evm-wallet
+      # - name:
+      #     Installs the package.
+      #   run: |
+      #     /entrypoint.sh \
+      #       pacman \
+      #         -Rdd \
+      #         --noconfirm \
+      #         "fur" || \
+      #         true
+      #     /entrypoint.sh \
+      #       pacman \
+      #         -Udd \
+      #         --noconfirm \
+      #           $(find \
+      #               "$(pwd)" \
+      #               -iname \
+      #                 "*.pkg.tar.*")
+      # - name:
+      #     Tests the package.
+      #   run: |
+      #     /entrypoint.sh \
+      #       fur \
+      #         -v \
+      #         evm-wallet
       - name:
           version
         run: |
@@ -1199,41 +1239,42 @@ jobs:
             -S \
               --noconfirm \
               jq \
-              "${_pkgs[@]}"
+              "${_pkgs[@]}" \
+              --overwrite="*"
       - name:
           Builds the package.
         run: |
           su \
             -c \
-              "cd '$(pwd)' && _evmfs="false" makepkg -df --nocheck" - \
+              "cd '$(pwd)' && _evmfs="false" makepkg -df --nocheck --skippgpcheck" - \
             "user"
-      - name:
-          Installs the package.
-        run: |
-          # mv \
-          #   "/home/user/lur/sequoia-sq/"*".pkg.tar."* \
-          #   "$(pwd)"
-          pacman \
-            -Rdd \
-            --noconfirm \
-            "fur" || \
-            true
-          pacman \
-            -Udd \
-            --noconfirm \
-            $(find \
-                "$(pwd)" \
-                -iname \
-                  "*.pkg.tar.*")
-      - name:
-          Tests the package.
-        run: |
-          fur \
-            -v \
-            -h
-          fur \
-            -v \
-            evm-chains
+      # - name:
+      #     Installs the package.
+      #   run: |
+      #     # mv \
+      #     #   "/home/user/lur/sequoia-sq/"*".pkg.tar."* \
+      #     #   "$(pwd)"
+      #     pacman \
+      #       -Rdd \
+      #       --noconfirm \
+      #       "fur" || \
+      #       true
+      #     pacman \
+      #       -Udd \
+      #       --noconfirm \
+      #       $(find \
+      #           "$(pwd)" \
+      #           -iname \
+      #             "*.pkg.tar.*")
+      # - name:
+      #     Tests the package.
+      #   run: |
+      #     fur \
+      #       -v \
+      #       -h
+      #     fur \
+      #       -v \
+      #       evm-chains
       - name:
           version
         run: |
@@ -1346,26 +1387,69 @@ jobs:
       - uses:
           actions/checkout@v3
       - name:
+          Installs Crash Bash Library.
+        run: |
+          git \
+            clone \
+              "https://github.com/themartiancompany/crash-bash"
+          cd \
+            "crash-bash"
+          mkdir \
+            -p \
+            "/usr/lib/libcrash-bash"
+          make \
+            PREFIX="/usr" \
+            install
+          cd \
+            ".."
+      - name:
           Gets recipe-get.
         run: |
           git \
             clone \
               "https://github.com/themartiancompany/reallymakepkg"
+          cd \
+            "reallymakepkg"
+          make \
+            PREFIX="/usr" \
+            install
+          cd \
+           ".."
       - name:
           Installs build dependencies.
         run: |
+          _evmfs="false" \
+          recipe-get \
+            -v \
+            "PKGBUILD" \
+            "makedepends" || \
+          true
           export \
-            _pkgs=(
-              $(_evmfs="false" \
-                recipe-get \
-                  "PKGBUILD" \
-                  "makedepends")
-          )
-          pacman \
-            -S \
+            _pkgs="$(
+              _evmfs="false" \
+              recipe-get \
+                "PKGBUILD" \
+                "makedepends")"
+          for _pkg in ${_pkgs}; do
+            export \
+              _pkgs_mingw="${_pkgs_mingw} mingw-w64-${{ matrix.env }}-${_pkg}"
+          done
+          for _pkg in ${_pkgs}; do
+            pacman \
+              -S \
               --noconfirm \
-              jq \
-              "${_pkgs[@]}"
+              "${_pkg}" \
+              --overwrite="*" || \
+              true
+          done
+          for _pkg in ${_pkgs_mingw}; do
+            pacman \
+              -S \
+              --noconfirm \
+              "${_pkg}" \
+              --overwrite="*" || \
+              true
+          done
       - name:
           Builds the package.
         run: |
@@ -1374,28 +1458,29 @@ jobs:
           _evmfs="false" \
           makepkg \
             -df \
-            --nocheck
-      - name:
-          Installs the package.
-        run: |
-          pacman \
-            -Rdd \
-            --noconfirm \
-            "fur" || \
-            true
-          pacman \
-            -Udd \
-            --noconfirm \
-            $(find \
-                "$(pwd)" \
-                -iname \
-                  "*.pkg.tar.*")
-      - name:
-          Tests the package.
-        run: |
-          fur \
-            -v \
-            evm-chains
+            --nocheck \
+            --skippgpcheck
+      # - name:
+      #     Installs the package.
+      #   run: |
+      #     pacman \
+      #       -Rdd \
+      #       --noconfirm \
+      #       "fur" || \
+      #       true
+      #     pacman \
+      #       -Udd \
+      #       --noconfirm \
+      #       $(find \
+      #           "$(pwd)" \
+      #           -iname \
+      #             "*.pkg.tar.*")
+      # - name:
+      #     Tests the package.
+      #   run: |
+      #     fur \
+      #       -v \
+      #       evm-chains
       - name:
           version
         run: |

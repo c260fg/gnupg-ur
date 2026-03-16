@@ -104,6 +104,7 @@ _pkgdesc=(
   'Complete and free implementation'
   'of the OpenPGP standard.'
 )
+pkgdesc="${_pkgdesc[*]}"
 arch=(
   "aarch64"
   "arm"
