@@ -1450,14 +1450,13 @@ jobs:
         run: |
           ls
           ( _evmfs="false" \
-              /entrypoint.sh \
-                recipe-get \
-                  -o \
-                    "array" \
-                  -d \
-                    " " \
-                  "PKGBUILD" \
-                  "makedepends" || \
+            recipe-get \
+              -o \
+                "array" \
+              -d \
+                " " \
+              "PKGBUILD" \
+              "makedepends" || \
             true ) > \
             "makedepends"
           echo \
