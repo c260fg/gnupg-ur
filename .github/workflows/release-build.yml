@@ -761,15 +761,16 @@ jobs:
       - name:
           Installs build dependencies.
         run: |
-          ( _evmfs="false" \
-              recipe-get \
-                -o \
-                  "array" \
-                "PKGBUILD" \
-                "makedepends" || \
-            true ) > \
-            "makedepends"
-          for _pkg in $(cat "makedepends"); do \
+          _evmfs="false" \
+            recipe-get \
+              -o \
+                "array" \
+              -d \
+                " " \
+              "PKGBUILD" \
+              "makedepends" > \
+            "${HOME}/makedepends"
+          for _pkg in $(cat "${HOME}/makedepends"); do \
             _depend_name="$( \
               /entrypoint.sh \
                 version-split \
@@ -785,7 +786,7 @@ jobs:
                   --overwrite="*" || \
                 true
           done
-          for _pkg in $(cat "makedepends"); do \
+          for _pkg in $(cat "${HOME}/makedepends"); do \
             _depend_name="$( \
               /entrypoint.sh \
                 version-split \
@@ -1803,25 +1804,29 @@ jobs:
         run: |
           _evmfs="false" \
             "recipe-get" \
+              -o \
+                "array" \
+              -d \
+                " " \
               "PKGBUILD" \
-              "makedepends" || \
-          true
-          ( _evmfs="false" \
-              recipe-get \
-                -o \
-                  "array" \
-                -d \
-                  " " \
-                "PKGBUILD" \
-                "makedepends" > \
+              "makedepends" > \
             "${HOME}/makedepends"
+          # ( _evmfs="false" \
+          #     recipe-get \
+          #       -o \
+          #         "array" \
+          #       -d \
+          #         " " \
+          #       "PKGBUILD" \
+          #       "makedepends" > \
+          #   "${HOME}/makedepends"
           for _pkg in $(cat "${HOME}/makedepends"); do \
             _mingw_name="mingw-w64-${{ matrix.env }}-${_pkg}"
             export \
               _pkgs_mingw="${_pkgs_mingw} ${_mingw_name}"
             echo \
               "${_mingw_name}" >> \
-              "makedepends-mingw"
+              "${HOME}/makedepends-mingw"
           done
           done
           for _pkg in $(cat "${HOME}/makedepends"); do \
@@ -1839,7 +1844,7 @@ jobs:
                 --overwrite="*" || \
               true; \
           done
-          for _pkg in $(cat "makedepends-mingw"); do \
+          for _pkg in $(cat "${HOME}/makedepends-mingw"); do \
             _depend_name="$( \
                 version-split \
                   "${_pkg}" \
@@ -1854,7 +1859,7 @@ jobs:
                 --overwrite="*" || \
               true; \
           done
-          for _pkg in $(cat "makedepends"); do \
+          for _pkg in $(cat "${HOME}/makedepends"); do \
             _depend_name="$( \
                 version-split \
                   "${_pkg}" \
