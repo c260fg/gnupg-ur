@@ -1487,21 +1487,27 @@ jobs:
           #     "makedepends" || \
           #   true ) > \
           #   "makedepends"
+          export \
+            _makedepends="$( \
+              cat \
+                "${HOME}/makedepends")"
           echo \
-            "Build dependencies found: '$(cat "${HOME}/makedepends")'"
+            "Build dependencies found: '$_makedepends'."
           for _pkg in $(cat "${HOME}/makedepends"); do \
             echo \
-              "Extracting package name from '${_pkg}' with version-split."
+              "Extracting package name from '${_pkg}' with version-split."; \
             version-split \
               -v \
               "${_pkg}" \
-              "name"
+              "name" || \
+              true; \
             _depend_name="$( \
-                version-split \
-                  "${_pkg}" \
-                  "name")"
+              version-split \
+                "${_pkg}" \
+                "name" || \
+              true)"; \
             echo \
-              "Installing '${_depend_name}' with pacman."
+              "Installing '${_depend_name}' with pacman."; \
             pacman \
               -S \
                 --noconfirm \
@@ -1510,13 +1516,14 @@ jobs:
                 --overwrite="*" || \
               true
           done
-          for _pkg in $(cat "makedpends"); do \
+          for _pkg in $(cat "${HOME}/makedepends"); do \
             _depend_name="$( \
-                version-split \
-                  "${_pkg}" \
-                  "name")"
+              version-split \
+                "${_pkg}" \
+                "name" || \
+              true)"; \
             echo \
-              "Installing '${_depend_name}' with fur."
+              "Installing '${_depend_name}' with fur."; \
               fur \
                 -v \
                 -t \
