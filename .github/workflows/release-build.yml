@@ -1470,7 +1470,6 @@ jobs:
           ls
           _evmfs="false" \
           recipe-get \
-            -v \
             -o \
               "array" \
             -d \
