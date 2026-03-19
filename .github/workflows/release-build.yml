@@ -314,31 +314,31 @@ jobs:
             rm \
               -rf \
               "${HOME}/fur"
-      - name:
-          Installs Reallymakepkg.
-        run: |
-          /entrypoint.sh \
-            fur \
-              -v \
-              -p \
-                "pacman" \
-              -d \
-              "reallymakepkg"
-          /entrypoint.sh \
-            rm \
-              "${HOME}/fur/termux/any/"*".pkg.tar."*".sig"
-          /entrypoint.sh \
-            tree \
-              "${HOME}"
-          /entrypoint.sh \
-            pacman \
-              -Udd \
-              --noconfirm \
-              "${HOME}/fur/termux/any/"*".pkg.tar."*
-          /entrypoint.sh \
-            rm \
-              -rf \
-              "${HOME}/fur"
+      # - name:
+      #     Installs Reallymakepkg.
+      #   run: |
+      #     /entrypoint.sh \
+      #       fur \
+      #         -v \
+      #         -p \
+      #           "pacman" \
+      #         -d \
+      #         "reallymakepkg"
+      #     /entrypoint.sh \
+      #       rm \
+      #         "${HOME}/fur/termux/any/"*".pkg.tar."*".sig"
+      #     /entrypoint.sh \
+      #       tree \
+      #         "${HOME}"
+      #     /entrypoint.sh \
+      #       pacman \
+      #         -Udd \
+      #         --noconfirm \
+      #         "${HOME}/fur/termux/any/"*".pkg.tar."*
+      #     /entrypoint.sh \
+      #       rm \
+      #         -rf \
+      #         "${HOME}/fur"
       - name:
           Installs 'build essential' ahah.
         run: |
@@ -1059,24 +1059,24 @@ jobs:
           rm \
             -rf \
             "${HOME}/fur"
-      - name:
-          Installs Reallymakepkg.
-        run: |
-          fur \
-            -v \
-            -d \
-            "reallymakepkg"
-          rm \
-            "${HOME}/fur/arch/any/"*".pkg.tar."*".sig"
-          tree \
-            "${HOME}"
-          pacman \
-            -Udd \
-            --noconfirm \
-            "${HOME}/fur/arch/any/"*".pkg.tar."*
-          rm \
-            -rf \
-            "${HOME}/fur"
+      # - name:
+      #     Installs Reallymakepkg.
+      #   run: |
+      #     fur \
+      #       -v \
+      #       -d \
+      #       "reallymakepkg"
+      #     rm \
+      #       "${HOME}/fur/arch/any/"*".pkg.tar."*".sig"
+      #     tree \
+      #       "${HOME}"
+      #     pacman \
+      #       -Udd \
+      #       --noconfirm \
+      #       "${HOME}/fur/arch/any/"*".pkg.tar."*
+      #     rm \
+      #       -rf \
+      #       "${HOME}/fur"
       - name:
           Installs Node Run.
         run: |
@@ -1665,24 +1665,24 @@ jobs:
           rm \
             -rf \
             "${HOME}/fur"
-      - name:
-          Installs Reallymakepkg.
-        run: |
-          fur \
-            -v \
-            -d \
-            "reallymakepkg"
-          rm \
-            "${HOME}/fur/arch/any/"*".pkg.tar."*".sig"
-          tree \
-            "${HOME}"
-          pacman \
-            -Udd \
-            --noconfirm \
-            "${HOME}/fur/arch/any/"*".pkg.tar."*
-          rm \
-            -rf \
-            "${HOME}/fur"
+      # - name:
+      #     Installs Reallymakepkg.
+      #   run: |
+      #     fur \
+      #       -v \
+      #       -d \
+      #       "reallymakepkg"
+      #     rm \
+      #       "${HOME}/fur/arch/any/"*".pkg.tar."*".sig"
+      #     tree \
+      #       "${HOME}"
+      #     pacman \
+      #       -Udd \
+      #       --noconfirm \
+      #       "${HOME}/fur/arch/any/"*".pkg.tar."*
+      #     rm \
+      #       -rf \
+      #       "${HOME}/fur"
       - name:
           Installs latest Crash Bash Library.
         run: |
