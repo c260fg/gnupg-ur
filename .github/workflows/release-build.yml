@@ -1380,7 +1380,7 @@ jobs:
         run: |
           pacman \
             -Rdd \
-            --confirm \
+            --noconfirm \
             "reallymakepkg"
           git \
             clone \
@@ -1711,7 +1711,7 @@ jobs:
         run: |
           pacman \
             -Rdd \
-            --confirm \
+            --noconfirm \
             "reallymakepkg"
           git \
             clone \
