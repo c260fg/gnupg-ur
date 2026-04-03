@@ -944,9 +944,6 @@ jobs:
           _arch="$( \
             uname \
               -m)" && \
-          if [[ "${_arch}" == "armv8l" ]]; then \
-            _arch="arm"; \
-          fi && \
           /entrypoint.sh \
             arch="${_arch}" \
             TERMUX_VERSION=50 \
@@ -2235,11 +2232,11 @@ jobs:
           Builds the Windows package.
         run: |
           mkdir \
-            "temp"
+            "/root/temp"
           cp \
             -r \
             * \
-            "temp"
+            "/root/temp"
           dos2unix \
             "PKGBUILD"
           cp \
@@ -2247,14 +2244,14 @@ jobs:
             "PKBUILD.windows"
           cp \
             -r \
-            "temp/"* \
+            "/root/temp/"* \
             "."
           mv \
             "PKGBUILD.windows" \
             "PKGBUILD"
           rm \
             -rf \
-            "temp"
+            "/root/temp"
           # export \
           #   _pkgbase="$( \
           #     recipe-get \
