@@ -893,6 +893,7 @@ jobs:
             SHELL="bash" \
             /entrypoint.sh \
               pacman \
+                --verbose \
                 -S \
                   --noconfirm \
                   "${_depend_name}" \
@@ -2242,7 +2243,7 @@ jobs:
             "PKGBUILD"
           cp \
             "PKGBUILD" \
-            "PKBUILD.windows"
+            "PKGBUILD.windows"
           cp \
             -r \
             "/root/temp/"* \
