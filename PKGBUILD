@@ -265,24 +265,19 @@ if [[ "${_evmfs}" == "true" ]]; then
     # Tallero
     # _evmfs_ns="0x6ec7cC56dCeC0a00CB15E97C64B1a5Ec7A31403c"
   elif [[ "${_git}" == "false" ]]; then
-    echo \
-      "AHAH." \
-      1>&2
-    exit \
-      1
-    # if [[ "${_git_service}" == "github" ]]; then
-    #   _sum="${_github_sum}"
-    #   _sig_sum="${_github_sig_sum}"
-    #   # Dvorak
-    #   # _evmfs_ns="0x87003Bd6C074C713783df04f36517451fF34CBEf"
-    #   # Truocolo
-    #   # _evmfs_ns="0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b"
-    # elif [[ "${_git_service}" == "gitlab" ]]; then
-    #   _sum="${_gitlab_sum}"
-    #   _sig_sum="${_gitlab_sig_sum}"
-    #   # Tallero
-    #   # _evmfs_ns="0x6ec7cC56dCeC0a00CB15E97C64B1a5Ec7A31403c"
-    # fi
+    if [[ "${_git_service}" == "github" ]]; then
+      _sum="${_github_sum}"
+      _sig_sum="${_github_sig_sum}"
+      # Dvorak
+      # _evmfs_ns="0x87003Bd6C074C713783df04f36517451fF34CBEf"
+      # Truocolo
+      # _evmfs_ns="0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b"
+    elif [[ "${_git_service}" == "gitlab" ]]; then
+      _sum="${_gitlab_sum}"
+      _sig_sum="${_gitlab_sig_sum}"
+      # Tallero
+      # _evmfs_ns="0x6ec7cC56dCeC0a00CB15E97C64B1a5Ec7A31403c"
+    fi
   fi
 elif [[ "${_evmfs}" == "false" ]]; then
   if [[ "${_git}" == "true" ]]; then
