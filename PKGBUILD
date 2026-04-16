@@ -147,7 +147,7 @@ _2_5_18_commit="1b8362889a522bbcfeb80ef3af61218db216f62b"
 _2_5_18_freepg_commit="756502e158cc2742a956333997037f72ee5ff40f"
 _commit="${_2_5_18_freepg_commit}"
 _libassuan_pkgver="3.0.2"
-pkgrel=62
+pkgrel=63
 _pkgdesc=(
   'Complete and free implementation'
   'of the OpenPGP standard.'
@@ -451,9 +451,24 @@ _android_fix() {
   local \
     _bash_files=() \
     _bin_files=() \
-    _usr_bin_files=()
+    _usr_bin_files=() \
+    _makefiles \
+    _shell
+  _shell="$(
+    command \
+      -v \
+      "bash")"
   termux-fix-shebang \
     "./autogen.sh"
+  mapfile \
+    -d \
+    $'\n' \
+    _bin_files < \
+    <(grep \
+        -rl \
+        '#!/bin' \
+        "${PWD}" || \
+      true)
   mapfile \
     -d \
     $'\n' \
@@ -484,6 +499,28 @@ _android_fix() {
     echo \
       "${_msg[*]}"
     termux-fix-shebang \
+      "${_file}"
+  done
+  mapfile \
+    -d \
+    $'\n' \
+    _makefiles < \
+    <(grep \
+        -rl \
+        -e \
+          "\b/bin/sh\b" \
+        "${PWD}" || \
+      true)
+  for _file in "${_makefiles[@]}"; do \
+    _msg=(
+      "Fixing shell for file"
+      "'${_file}'."
+    )
+    echo \
+      "${_msg[*]}"
+    sed \
+      "s%/bin/sh%${_shell}%g"
+      -i \
       "${_file}"
   done
 }
