@@ -943,7 +943,7 @@ jobs:
           GITHUB_TOKEN:
             ${{ secrets.GITHUB_TOKEN }}
         run: |
-          /entrypoint \
+          /entrypoint.sh \
             bash \
               ".github/gur-mini" \
               "themartiancompany" \
@@ -955,7 +955,7 @@ jobs:
           GITHUB_TOKEN:
             ${{ secrets.GITHUB_TOKEN }}
         run: |
-          /entrypoint \
+          /entrypoint.sh \
             bash \
               ".github/gur-mini" \
               "themartiancompany" \
