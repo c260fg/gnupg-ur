@@ -29,6 +29,8 @@ _global_variables() {
   namespace=""
   repo=""
   tag=""
+  arch=""
+  pkgname=""
 }
 
 _gur_mini() {
@@ -138,6 +140,8 @@ app_opts=(
   "${namespace}"
   "${repo}"
   "${tag}"
+  "${arch}"
+  "${pkgname}"
 )
 
 _gur_mini \
