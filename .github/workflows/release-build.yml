@@ -975,6 +975,8 @@ jobs:
             pacman \
               -Udd \
               --noconfirm \
+              --arch \
+                "armv8l" \
               "dogeos-android-fig2dev"*".pkg.tar."*
       - name:
           Installs build dependencies.
@@ -1055,6 +1057,8 @@ jobs:
               -Udd \
               --noconfirm \
               --overwrite="*" \
+              --arch \
+                "armv8l" \
               "dogeos-android-libassuan"*".pkg.tar."*
       - name:
           Builds the Android package.
