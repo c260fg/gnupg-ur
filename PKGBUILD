@@ -145,6 +145,30 @@ if [[ ! -v "_archive_format" ]]; then
     fi
   fi
 fi
+if [[ "${_os}" == "Android" ]]; then
+  _locale="C.UTF-8"
+else
+  _locale="$(
+    locale |
+      grep \
+        "LANG=" |
+        awk \
+          -F \
+            "=" \
+          '{print $1}')"
+fi
+if [[ ! -v "_en" ]]; then
+  _en="true"
+  if [[ "${_locale}" == "C.UTF-8" ]]; then
+    _en="true"
+  fi
+fi
+if [[ ! -v "_it" ]]; then
+  _it="true"
+  if [[ "${_locale}" == "it_IT.UTF-8" ]]; then
+    _it="true"
+  fi
+fi
 if [[ ! -v "_like" ]]; then
   if [[ "${_it}" == "true" ]]; then
     _like="mo-me-lo-segno"
