@@ -972,6 +972,11 @@ jobs:
               "3.0.2-32" \
               "${{ matrix.architecture }}" \
               "libassuan"
+          /entrypoint.sh \
+            pacman \
+              -Udd \
+              --noconfirm \
+              "${HOME}/libassuan"*".pkg.tar."*
       - name:
           Target specific fig2dev while the CI issue is not solved.
         env:
@@ -986,6 +991,11 @@ jobs:
               "3.2.9.1-17" \
               "${{ matrix.architecture }}" \
               "fig2dev"
+          /entrypoint.sh \
+            pacman \
+              -Udd \
+              --noconfirm \
+              "${HOME}/fig2dev"*".pkg.tar."*
       - name:
           Installs build dependencies.
         env:
