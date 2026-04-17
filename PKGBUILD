@@ -97,6 +97,9 @@ fi
 if [[ ! -v "_git_service" ]]; then
   _git_service="github"
 fi
+if [[ ! -v "_docs" ]]; then
+  _docs="false"
+fi
 _pkg=gnupg
 if [[ ! -v "_git_http" ]]; then
   if [[ "${_git_service}" == "github" ]]; then
@@ -147,7 +150,7 @@ _2_5_18_commit="1b8362889a522bbcfeb80ef3af61218db216f62b"
 _2_5_18_freepg_commit="756502e158cc2742a956333997037f72ee5ff40f"
 _commit="${_2_5_18_freepg_commit}"
 _libassuan_pkgver="3.0.2"
-pkgrel=80
+pkgrel=81
 _pkgdesc=(
   'Complete and free implementation'
   'of the OpenPGP standard.'
@@ -194,8 +197,6 @@ depends=(
 )
 makedepends=(
   "bzip2"
-  "fig2dev"
-  "imagemagick"
   "libassuan>=${_libassuan_pkgver}"
   "librsvg"
   "${_npth}"
@@ -206,6 +207,13 @@ makedepends=(
   "${_compiler}"
   "${_libcompiler}"
 )
+if [[ "${_docs}" == "true" ]]; then
+  makedepends+=(
+    "fig2dev"
+    "ghostscript"
+    "imagemagick"
+  )
+fi
 if [[ "${_os}" == "Msys" ]]; then
   makedepends+=(
     "${_libc_headers}"
@@ -644,6 +652,11 @@ build() {
     --sbindir="/usr/bin"
     --sysconfdir="/etc"
   )
+  if [[ "${_docs}" == "false" ]]; then
+    _configure_opts+=(
+      --disable-doc
+    )
+  fi
   cd \
     "${_tarname}"
   "./configure" \
